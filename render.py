@@ -1,5 +1,7 @@
 from docxtpl import DocxTemplate
 import pandas as pd
+import numpy as np
+from docx2pdf import convert
 
 
 class Visitor:
@@ -26,10 +28,17 @@ def create_tags(visitors):
             'contact_number': visitor.contact_number
         }
         doc.render(context)
-        doc.save(f"generated_{visitor.name}.docx")
+        # doc.save(f"{visitor.name[:5]}.docx")
+        doc.save('C:\CGI_projects\identity_card_design\\badges_in_word_format\\' +
+                 f"{visitor.name[:5]}.docx")
+        convert('C:\CGI_projects\identity_card_design\\badges_in_word_format\\' +
+                f"{visitor.name[:5]}.docx", 'C:\CGI_projects\identity_card_design\\badges_in_pdf_format\\' + f"{visitor.name[:5]}.pdf")
+        #convert(f"{visitor.name[:5]}.docx", f"{visitor.name[:5]}.pdf")
 
 
 visitor_data = pd.read_excel('data_ids.xlsx', index_col=0)
+visitor_data = visitor_data.replace(np.nan, '-', regex=True)
+
 # print(visitor_data['name'])
 
 for index, row in visitor_data.iterrows():
